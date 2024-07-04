@@ -1,24 +1,39 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
+import Navbar from './component/Navbar';
+import SplashScreen from './component/SplashScreen';
+import MovieList from './component/MovieList';
+import Home from './component/Home';
+import TvShows from './component/TvShows';
+import NewAndPopular from './component/NewAndPopular';
 
-function App() {
+
+const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedGenre, setSelectedGenre] = useState('');
+
+  const handleFinishLoading = () => {
+    setIsLoading(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      {isLoading ? (
+        <SplashScreen onFinish={handleFinishLoading} />
+      ) : (
+        <>
+          <Navbar onGenreSelect={setSelectedGenre} />
+          <Routes>
+            <Route path="/" element={<Home selectedGenre={selectedGenre} />} />
+            <Route path="/tvshows" element={<TvShows />} />
+            <Route path="/movies" element={<MovieList />} />
+            <Route path ="/newpopular" element={<NewAndPopular/>}/>
+           
+          </Routes>
+        </>
+      )}
+    </Router>
   );
 }
 
